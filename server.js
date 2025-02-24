@@ -6,19 +6,23 @@ const PORT = process.env.PORT || 3000;
 
 let count = 0; // In-memory counter (resets when server restarts)
 
-// Serve static files only from the 'public' folder (prevents Railway from serving everything)
+// Middleware to parse JSON requests (fixes 404 on POST)
+app.use(express.json());
+
+// Serve static files from the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API endpoint to get the current count
+// ✅ API endpoint to get the current count
 app.get('/count', (req, res) => {
     res.json({ count });
 });
 
-// API endpoint to increment the count
+// ✅ FIXED: Ensure Express correctly handles POST requests
 app.post('/increment', (req, res) => {
     count++;
+    console.log(`Count incremented: ${count}`); // Debugging log
     res.json({ count });
 });
 
-// Start the server
+// ✅ Ensure Express correctly listens for incoming requests
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
