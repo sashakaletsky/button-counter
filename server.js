@@ -6,8 +6,8 @@ const PORT = process.env.PORT || 3000;
 
 let count = 0; // In-memory counter (resets when server restarts)
 
-// Serve static files from the current directory
-app.use(express.static(__dirname));
+// Serve static files only from the 'public' folder (prevents Railway from serving everything)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // API endpoint to get the current count
 app.get('/count', (req, res) => {
@@ -18,11 +18,6 @@ app.get('/count', (req, res) => {
 app.post('/increment', (req, res) => {
     count++;
     res.json({ count });
-});
-
-// Serve index.html when visiting the root URL
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start the server
